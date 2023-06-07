@@ -15,7 +15,7 @@
 
         public List<DateTime> loginTime { get; set; }
 
-        public userObject(int id, string name, DateOnly birthDate, ROLES role)
+        public userObject(int id, string name, DateOnly birthDate, ROLES role = ROLES.user)
         {
             this.userId = id;
             this.userName = name;   
