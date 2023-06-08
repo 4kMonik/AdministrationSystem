@@ -3,11 +3,39 @@ namespace PageObject
     public class usersListPage
     {
         public int pageNum { get; }
-        public Dictionary<int, Tuple<string, string, string>> pageRows;
+        protected Dictionary<int, Tuple<string, string, string>> pageRows;
         public usersListPage(int pageNum)
         {
             pageRows = new Dictionary<int, Tuple<string, string, string>>();
             this.pageNum = pageNum;
+        }
+        public void AddRow(int userId, Tuple<string, string, string> userData)
+        {
+            pageRows.Add(userId, userData);
+        }
+        public void RemoveRow(int userId) 
+        {
+            pageRows.Remove(userId);    
+        }
+        public bool IsUserInList(int userId) 
+        {
+            return pageRows.ContainsKey(userId);
+        }
+        public string GetNameById(int id)
+        {
+            return pageRows[id].Item1;
+        }
+        public string GetBirthDateById(int id) 
+        {
+            return pageRows[id].Item2;
+        }
+        public string GetRoleById(int id)
+        {
+            return pageRows[id].Item3;
+        }
+        public List<int> GetIdList()
+        {
+            return pageRows.Keys.ToList();
         }
     }
     public class userPage

@@ -21,6 +21,7 @@
             this.userName = name;   
             this.userRole = role;
             this.userBirthDate = birthDate;
+            this.loginTime = new userLoginTime();
         }
 
 

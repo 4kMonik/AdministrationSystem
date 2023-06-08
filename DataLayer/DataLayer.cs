@@ -24,7 +24,17 @@ namespace DataLayerLogic
 
         public DataLayer()
         {
-            connectionString = "Host=localhost;Port=5549;Username=postgres;Password=31497;Database=postgres";
+            connectionString = "Host=localhost;Port=5549;Username=admin;Password=123;Database=postgres";
+        }
+
+        public async Task<int> CountUsers()
+        {
+            await using var cmd = new NpgsqlCommand("SELECT COUNT(*) \r\n\t" +
+                                                    "FROM \"UserSchema\".\"Users\";");
+            cmd.Connection = connection;
+            await using var reader = await cmd.ExecuteReaderAsync();
+            await reader.ReadAsync();
+            return reader.GetInt32(0);
         }
 
         public async Task InsertData(userObject userToInsert)
@@ -42,7 +52,7 @@ namespace DataLayerLogic
             Convert.ToBoolean(await cmd.ExecuteNonQueryAsync());
         }
 
-        public async Task<List<userObject>> GetPage(int page_size = 5, int page_number = 1, Filter filter = null)
+        public async Task<List<userObject>> GetPage(int page_size = 5, int page_number = 1)
         {
             await using var cmd = new NpgsqlCommand("SELECT \"userID\" AS \"ID\", \"userName\" AS \"Name\", \"userDateOfBirth\" AS \"Birthday\", \"role\" AS \"Role\"\r\n\r\n" +
                                                     "FROM \"UserSchema\".\"Users\"\r\n" +
@@ -58,7 +68,6 @@ namespace DataLayerLogic
             }
 
             };
-            if (Filrter != null)
             cmd.Connection = connection;
             await using var reader = await cmd.ExecuteReaderAsync();
             List<userObject> readData = new List<userObject>();
