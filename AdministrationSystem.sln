@@ -5,13 +5,15 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdministrationSystem", "PostgreSQL_connect\AdministrationSystem.csproj", "{7C1B3B57-D4A9-490C-9F19-02E2EADB2EB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuisnessObject", "BuisnessObject\BuisnessObject.csproj", "{40749FB8-5EED-4074-A0E9-EF3DBA696360}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuisnessObject", "BuisnessObject\BuisnessObject.csproj", "{40749FB8-5EED-4074-A0E9-EF3DBA696360}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuisnessLayerLogic", "BuisnessLayer\BuisnessLayerLogic.csproj", "{AF1C61D2-2486-446A-879C-EEEADBF8016F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuisnessLayerLogic", "BuisnessLayer\BuisnessLayerLogic.csproj", "{AF1C61D2-2486-446A-879C-EEEADBF8016F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayerLogic", "DataLayer\DataLayerLogic.csproj", "{B6B144D5-9CE2-42B0-9C4A-C70195D27FD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayerLogic", "DataLayer\DataLayerLogic.csproj", "{B6B144D5-9CE2-42B0-9C4A-C70195D27FD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserInterfaceLogic", "UserInterfaceLogic\UserInterfaceLogic.csproj", "{8A2F817C-1A09-4D74-BB7D-A4A785D677EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserInterfaceLogic", "UserInterfaceLogic\UserInterfaceLogic.csproj", "{8A2F817C-1A09-4D74-BB7D-A4A785D677EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PageObject", "PageObject\PageObject.csproj", "{3C22F007-F8DA-4F05-8459-281D7DBC9C27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{8A2F817C-1A09-4D74-BB7D-A4A785D677EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A2F817C-1A09-4D74-BB7D-A4A785D677EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A2F817C-1A09-4D74-BB7D-A4A785D677EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C22F007-F8DA-4F05-8459-281D7DBC9C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C22F007-F8DA-4F05-8459-281D7DBC9C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C22F007-F8DA-4F05-8459-281D7DBC9C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C22F007-F8DA-4F05-8459-281D7DBC9C27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

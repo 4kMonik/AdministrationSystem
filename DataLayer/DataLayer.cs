@@ -42,7 +42,7 @@ namespace DataLayerLogic
             Convert.ToBoolean(await cmd.ExecuteNonQueryAsync());
         }
 
-        public async Task<List<userObject>> GetPage(int page_size = 5, int page_number = 1)
+        public async Task<List<userObject>> GetPage(int page_size = 5, int page_number = 1, Filter filter = null)
         {
             await using var cmd = new NpgsqlCommand("SELECT \"userID\" AS \"ID\", \"userName\" AS \"Name\", \"userDateOfBirth\" AS \"Birthday\", \"role\" AS \"Role\"\r\n\r\n" +
                                                     "FROM \"UserSchema\".\"Users\"\r\n" +
@@ -58,6 +58,7 @@ namespace DataLayerLogic
             }
 
             };
+            if (Filrter != null)
             cmd.Connection = connection;
             await using var reader = await cmd.ExecuteReaderAsync();
             List<userObject> readData = new List<userObject>();

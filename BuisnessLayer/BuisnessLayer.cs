@@ -1,4 +1,5 @@
 ﻿using BuisnessObject;
+using PageObject;
 using DataLayerLogic;
 
 namespace BuisnessLayerLogic
@@ -90,12 +91,13 @@ namespace BuisnessLayerLogic
             return true;
         }
 
-        public async Task<List<userObject>> LoadPage(int pageSize = 5, int pageNum = 1)
+        public async Task<usersListPage> LoadPage(int pageSize = 5, int pageNum = 1)
         {
-            var page = await dataLayer.GetPage(pageSize, pageNum);
-            foreach (var row in page)
+            usersListPage page = new usersListPage(pageNum);
+            var userList = await dataLayer.GetPage(pageSize, pageNum);
+            foreach (var user in userList)
             {
-                row.loginTime = await dataLayer.GetLoginTime(row.userId);
+                page.pageRows.Add(user.userId, Tuple.Create(user.userName, user.userBirthDate.ToString(), user.userRole.ToString()));
             }
             return page;
         }

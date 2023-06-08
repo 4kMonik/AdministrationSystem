@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BuisnessLayer\BuisnessLayerLogic.csproj" />
-    <ProjectReference Include="..\PageObject\PageObject.csproj" />
-  </ItemGroup>
-
 </Project>

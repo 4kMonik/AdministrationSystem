@@ -8,12 +8,12 @@
             admin,
             guest
         }
-        public int userId { get;}
+        public int userId { get; }
         public string userName { get; }
         public ROLES userRole { get; }
         public DateOnly userBirthDate { get; }
 
-        public List<DateTime> loginTime { get; set; }
+        public userLoginTime loginTime{ get;}
 
         public userObject(int id, string name, DateOnly birthDate, ROLES role = ROLES.user)
         {
@@ -24,5 +24,13 @@
         }
 
 
+    }
+    public class userLoginTime
+    {
+        public List<DateTime> timeTable { get; set; }
+        public userLoginTime()
+        {
+            this.timeTable = new List<DateTime>();
+        }
     }
 }
