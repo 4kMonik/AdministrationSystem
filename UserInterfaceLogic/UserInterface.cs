@@ -105,7 +105,9 @@ namespace UserInterfaceLogic
         public async Task PageScreen(int startPageNum = 1)
         {
             int pageNum = startPageNum;
-            usersListPage page = await buisnessLayer.LoadPage(pageSize, pageNum);
+            string orderBy = "userID";
+            string order = "ASC";
+            usersListPage page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
         Start:          
             DisplayPage(page);
             switch (InputRequest())
@@ -113,7 +115,7 @@ namespace UserInterfaceLogic
                 case ConsoleKey.LeftArrow:
                     try
                     {
-                        page = await buisnessLayer.LoadPage(pageSize, pageNum - 1);
+                        page = await buisnessLayer.LoadPage(pageSize, pageNum - 1, orderBy, order);
                         pageNum--;
                     }
                     catch(ArgumentOutOfRangeException e)
@@ -125,7 +127,7 @@ namespace UserInterfaceLogic
                 case ConsoleKey.RightArrow:
                     try
                     {
-                        page = await buisnessLayer.LoadPage(pageSize, pageNum + 1);
+                        page = await buisnessLayer.LoadPage(pageSize, pageNum + 1, orderBy, order);
                         pageNum++;
                     }
                     catch(ArgumentOutOfRangeException e)
@@ -154,7 +156,7 @@ namespace UserInterfaceLogic
                     var new_pageNum = PageNumRequest();
                     try
                     {
-                        page = await buisnessLayer.LoadPage(pageSize, new_pageNum);
+                        page = await buisnessLayer.LoadPage(pageSize, new_pageNum, orderBy, order);
                         pageNum = new_pageNum;
                     }
                     catch (ArgumentOutOfRangeException e)
@@ -170,7 +172,7 @@ namespace UserInterfaceLogic
                         if (page.IsUserInList(id))
                         {
                             await UserScreen(id, page);
-                            page = await buisnessLayer.LoadPage(pageSize, pageNum);
+                            page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
                         }
                         else
                             throw new ArgumentException("Invalid ID");
@@ -191,6 +193,20 @@ namespace UserInterfaceLogic
                     {
 
                     }
+                    goto Start;
+                case ConsoleKey.UpArrow:
+                    order = "ASC";
+                    page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
+                    goto Start;
+                case ConsoleKey.DownArrow:
+                    order = "DESC";
+                    page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
+                    goto Start;
+                case ConsoleKey.F:
+                    var filter = Console.ReadLine();
+                    if (filter == "userID" || filter == "userName" || filter == "userDateOfBirth" || filter == "userRole")
+                        orderBy = filter;
+                    page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
                     goto Start;
                 default:
                     goto Start;

@@ -52,19 +52,22 @@ namespace DataLayerLogic
             Convert.ToBoolean(await cmd.ExecuteNonQueryAsync());
         }
 
-        public async Task<List<userObject>> GetPage(int page_size = 5, int page_number = 1)
+        public async Task<List<userObject>> GetPage(int page_size = 5, int page_number = 1, string orderBy = "userID", string order = "ASC")
         {
-            await using var cmd = new NpgsqlCommand("SELECT \"userID\" AS \"ID\", \"userName\" AS \"Name\", \"userDateOfBirth\" AS \"Birthday\", \"role\" AS \"Role\"\r\n\r\n" +
-                                                    "FROM \"UserSchema\".\"Users\"\r\n" +
-                                                    "INNER JOIN \"UserSchema\".\"Roles\"\r\n" +
-                                                    "ON \"UserSchema\".\"Users\".\"userRole\" = \"UserSchema\".\"Roles\".\"roleID\"\r\n" +
-                                                    "ORDER BY \"userID\" ASC " +
-                                                    "LIMIT $1 OFFSET $2")
+            await using var cmd = new NpgsqlCommand("SELECT \"userID\" AS \"ID\", \"userName\" AS \"Name\", \"userDateOfBirth\" AS \"Birthday\", \"role\" AS \"Role\"\r\n" +
+                                                    "FROM \"UserSchema\".\"Users\"\r\nINNER JOIN \"UserSchema\".\"Roles\"\r\nON \"UserSchema\".\"Users\".\"userRole\" = \"UserSchema\".\"Roles\".\"roleID\"\r\n" +
+                                                    "ORDER BY \r\n\t" +
+                                                    "\"" + orderBy + "\" " +
+                                                    order + " " +
+                                                    "LIMIT $3 OFFSET $4")
             {
                 Parameters =
             {
+                new() { Value = orderBy },
+                new() { Value = order },
                 new() { Value = page_size},
                 new() { Value = (page_number - 1) * page_size}
+
             }
 
             };
@@ -112,9 +115,8 @@ namespace DataLayerLogic
 
         public async Task InsertLoginTime(userObject user, userLoginTime loginTime)
         {
-            await using var cmd = new NpgsqlCommand("INSERT INTO \"UserSchema\".\"LoginTime\"" +
-                                                    "(\"userID\", \"time\")" +
-                                                    "VALUE($1, $2);")
+            await using var cmd = new NpgsqlCommand("INSERT INTO \"UserSchema\".\"LoginTime\"(\r\n\t\"userID\", \"time\")\r\n\t" +
+                                                    "VALUES ($1, $2);")
             {
                 Parameters =
                 {
@@ -148,8 +150,7 @@ namespace DataLayerLogic
 
         public async Task<bool> DeleteData(userObject user)
         {
-            var cmd = new NpgsqlCommand("DELETE FROM \"UserSchema\".\"Users\"\r\n" +
-                                        "WHERE \"userID\" = $1")
+            var cmd = new NpgsqlCommand("DELETE FROM \"UserSchema\".\"LoginTime\"\r\n\tWHERE \"LoginTime\".\"userID\" = $1;\r\n")
             {
                 Parameters =
                 {
@@ -157,7 +158,10 @@ namespace DataLayerLogic
                 }
             };
             cmd.Connection = connection;
-            return Convert.ToBoolean(await cmd.ExecuteNonQueryAsync());
+            await cmd.ExecuteNonQueryAsync();
+            cmd.CommandText = "DELETE FROM \"UserSchema\".\"Users\"\r\n\tWHERE \"Users\".\"userID\" = $1;";
+            await cmd.ExecuteNonQueryAsync();
+            return true;
         }
 
         public async Task<int> SearchUser(userObject user)

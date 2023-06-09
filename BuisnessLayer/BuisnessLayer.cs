@@ -80,12 +80,12 @@ namespace BuisnessLayerLogic
             {
                 throw new ArgumentException("Invalid id");
             }
-            userObject userToDelete = new userObject(id, "", new DateOnly(0, 0, 0));
+            userObject userToDelete = new userObject(id, "", new DateOnly());
             await dataLayer.DeleteData(userToDelete);
             return true;
         }
 
-        public async Task<usersListPage> LoadPage(int pageSize = 5, int pageNum = 1)
+        public async Task<usersListPage> LoadPage(int pageSize = 5, int pageNum = 1, string orderBy = "userID", string order = "ASC")
         {
             if (pageSize < 1)
                 throw new ArgumentOutOfRangeException("Invalid page size");
@@ -95,7 +95,7 @@ namespace BuisnessLayerLogic
             if (pageNum < 1 || pageNum > userCount / pageSize + additionalPage)
                 throw new ArgumentOutOfRangeException("Invalid number of pages");
             usersListPage page = new usersListPage(pageNum);
-            var userList = await dataLayer.GetPage(pageSize, pageNum);
+            var userList = await dataLayer.GetPage(pageSize, pageNum, orderBy, order);
             foreach (var user in userList)
             {
                 page.AddRow(user.userId, Tuple.Create(user.userName, user.userBirthDate.ToString(), user.userRole.ToString()));
@@ -105,7 +105,7 @@ namespace BuisnessLayerLogic
 
         public async Task<userPage> LoadUser(int userID, usersListPage page)
         {
-            userPage user = new userPage(userID, page.GetNameById(userID), page.GetBirthDateById(userID), page.GetBirthDateById(userID));
+            userPage user = new userPage(userID, page.GetNameById(userID), page.GetBirthDateById(userID), page.GetRoleById(userID));
             foreach (var login in await dataLayer.GetLoginTime(userID))
             {
                 user.loginTimes.Add(login.ToString());
