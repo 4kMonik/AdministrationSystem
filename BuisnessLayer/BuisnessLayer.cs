@@ -8,7 +8,7 @@ namespace BuisnessLayerLogic
     {
         private DataLayer dataLayer;
         public int userCount;
-        public BuisnessLayer() 
+        public BuisnessLayer()
         {
             dataLayer = new DataLayer();
             userCount = 0;
@@ -24,13 +24,9 @@ namespace BuisnessLayerLogic
         }
         public async Task<bool> AddUser(string name, string birthDate, string role)
         {
-            userObject userToAdd = new userObject(
-                                       0,
-                                       name,
-                                       DateOnly.Parse(birthDate),
-                                       (userObject.ROLES) Enum.Parse(typeof(userObject.ROLES), role));
+            userObject userToAdd = userObject.CreateFromString(0, name, birthDate, role);
             var id = await dataLayer.SearchUser(userToAdd);
-            if (!Convert.ToBoolean(id))
+            if (id == 0)
             {
                 await dataLayer.InsertData(userToAdd);
                 return true;
@@ -42,19 +38,9 @@ namespace BuisnessLayerLogic
             }
         }
 
-        public async Task<bool> EditUser(int id, string name, string _birthDate, string _role)
+        public async Task<bool> EditUser(int id, string name, string birthDate, string role)
         {
-            DateOnly birthDate;
-            if (!DateOnly.TryParse(_birthDate, out birthDate))
-                throw new ArgumentException("Invalid data format");
-            userObject.ROLES role;
-            if (!Enum.TryParse(_role, out role))
-                throw new ArgumentException("Invalid role format");
-            userObject userToEdit = new userObject(
-                                       id,
-                                       name,
-                                       birthDate,
-                                       role);
+            userObject userToEdit = userObject.CreateFromString(id, name, birthDate, role);
             if (!await dataLayer.SearchUserByID(id))
             {
                 Console.WriteLine("User does not exist");
@@ -92,8 +78,7 @@ namespace BuisnessLayerLogic
         {
             if (!await dataLayer.SearchUserByID(id))
             {
-                Console.WriteLine("User does not exist");
-                return false;
+                throw new ArgumentException("Invalid id");
             }
             userObject userToDelete = new userObject(id, "", new DateOnly(0, 0, 0));
             await dataLayer.DeleteData(userToDelete);
@@ -107,7 +92,7 @@ namespace BuisnessLayerLogic
             int additionalPage = 0;
             if (userCount % pageSize != 0)
                 additionalPage = 1;
-            if (pageNum < 1 || pageNum > userCount/pageSize + additionalPage)
+            if (pageNum < 1 || pageNum > userCount / pageSize + additionalPage)
                 throw new ArgumentOutOfRangeException("Invalid number of pages");
             usersListPage page = new usersListPage(pageNum);
             var userList = await dataLayer.GetPage(pageSize, pageNum);
@@ -125,9 +110,12 @@ namespace BuisnessLayerLogic
             {
                 user.loginTimes.Add(login.ToString());
             }
-            return user; 
+            return user;
         }
 
-
+        public async Task LogInUser(userPage user, string loginTime)
+        {
+            await dataLayer.InsertLoginTime(userObject.CreateFromString(user.id, user.name, user.birthDate, user.role), userLoginTime.CreateFromString(loginTime));
+        }
     }
 }

@@ -110,6 +110,22 @@ namespace DataLayerLogic
             return userLoginTimes;
         }
 
+        public async Task InsertLoginTime(userObject user, userLoginTime loginTime)
+        {
+            await using var cmd = new NpgsqlCommand("INSERT INTO \"UserSchema\".\"LoginTime\"" +
+                                                    "(\"userID\", \"time\")" +
+                                                    "VALUE($1, $2);")
+            {
+                Parameters =
+                {
+                    new() {Value = user.userId},
+                    new() {Value = loginTime.time}
+                }
+            };
+            cmd.Connection = connection;
+            await cmd.ExecuteNonQueryAsync();
+            return;
+        }
         public async Task<userObject> UpdateData(userObject user)
         {
             await using var cmd = new NpgsqlCommand("UPDATE \"UserSchema\".\"Users\"\r\n" +

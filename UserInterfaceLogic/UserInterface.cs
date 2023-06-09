@@ -60,7 +60,17 @@ namespace UserInterfaceLogic
                 Console.WriteLine("Invalid input");
             return 0;
         }
-
+        private static userPage AddUserRequest()
+        {
+            Console.WriteLine("Enter name");
+            var name = Console.ReadLine();
+            Console.WriteLine("Enter birthdate");
+            var date = Console.ReadLine();
+            Console.WriteLine("Enter role");
+            var role = Console.ReadLine();
+            userPage addUser = new userPage(0, name, date, role);
+            return addUser;
+        }
         private static userPage EditUserRequest(int id)
         {
             Console.WriteLine("Enter name");
@@ -95,9 +105,8 @@ namespace UserInterfaceLogic
         public async Task PageScreen(int startPageNum = 1)
         {
             int pageNum = startPageNum;
-            usersListPage page;
-        Start:
-            page = await buisnessLayer.LoadPage(pageSize, pageNum);
+            usersListPage page = await buisnessLayer.LoadPage(pageSize, pageNum);
+        Start:          
             DisplayPage(page);
             switch (InputRequest())
             {
@@ -156,12 +165,31 @@ namespace UserInterfaceLogic
                     goto Start;
                 case ConsoleKey.Enter:
                     var id = IdRequest();
-                    if (page.IsUserInList(id))
-                        await UserScreen(id, page);
-                    else
+                    try
                     {
-                        Console.WriteLine("Invalid ID");
+                        if (page.IsUserInList(id))
+                        {
+                            await UserScreen(id, page);
+                            page = await buisnessLayer.LoadPage(pageSize, pageNum);
+                        }
+                        else
+                            throw new ArgumentException("Invalid ID");
+                    }
+                    catch (ArgumentException arg)
+                    {
+                        Console.WriteLine(arg.Message);
                         ExceptionRequest();
+                    }
+                    goto Start;
+                case ConsoleKey.A:
+                    var userToAdd = AddUserRequest();
+                    try
+                    {
+                        await buisnessLayer.AddUser(userToAdd.name, userToAdd.birthDate, userToAdd.role);
+                    }
+                    catch
+                    {
+
                     }
                     goto Start;
                 default:
@@ -176,7 +204,16 @@ namespace UserInterfaceLogic
             switch(InputRequest())
             {
                 case ConsoleKey.D:
-                    goto Start;
+                    try
+                    {
+                        await buisnessLayer.DeleteUser(user.id);
+                    }
+                    catch (ArgumentException arg)
+                    {
+                        Console.WriteLine(arg.Message);
+                        ExceptionRequest();
+                    }
+                    break;
                 case ConsoleKey.E:
                     var editUser = EditUserRequest(user.id);
                     try
@@ -190,6 +227,10 @@ namespace UserInterfaceLogic
                         goto Start;
                     }
                     break;
+                case ConsoleKey.L:
+                    var curr = DateTime.Now;
+                    await buisnessLayer.LogInUser(user, Convert.ToString(curr));
+                    goto Start;
                 case ConsoleKey.Escape:
                     break;
                 default:
