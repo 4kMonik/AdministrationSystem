@@ -4,8 +4,8 @@
 ## Язык: C#
 ## Структура
 Структура системы выглядит следующим образом:
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/f3509262-413c-4e3e-83e1-9aa226982705)
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/17e40be6-02bd-4ee6-b6d7-abd08dd2df41)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/525182c1-4873-4ece-94b3-f98360419032)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/34234782-422f-491b-bcfe-beda225c8974)
 
 ### PostgreSQL
 В качестве источника данных была создана локальная PostgeSQL BD на порте 5549
@@ -14,15 +14,15 @@
 
 Users - записи пользователей
 
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/0ed5a7e6-edeb-41be-978a-fc615cfe8cbc)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/657692d6-20fe-47b9-a01d-14d0e96fc1e8)
 
 Roles - для хранения доступных ролей
 
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/71d60650-8524-4814-bb7e-fab46ff19bf7)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/5cac2b0f-a602-4c91-9bb6-6697279722aa)
 
 LoginTime - таблица содержащая время входа пользователей в систему
 
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/3c4afdf7-f490-453f-9db4-f55d095ff0c4)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/333e6a8e-b4d2-4f81-b7e7-94ac77a5417e)
 
 ### DataAccessLayer
 Для подключения к БД использовалась библиотека Npgsql
@@ -46,13 +46,13 @@ LoginTime - таблица содержащая время входа польз
 Всего реализовано 3 экрана:
 - Главный экран
 
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/7b664a89-9a2c-4007-9eca-306631ab0697)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/8ec839e8-6ed2-4667-a4a2-219a4baac623)
 
 - Экран таблцы пользователей
 
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/201d411b-51b1-4dbc-8e36-268f6a6159b4)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/cb8b694c-375c-4553-a442-95a575919871)
 
 - Экран конкретного пользователя
 
-![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/f80eef91-2368-4a23-a384-589c39a94626)
+![image](https://github.com/4kMonik/AdministrationSystem/assets/77895085/40362ebe-9c7e-445e-b109-1ed67db644f8)
 
