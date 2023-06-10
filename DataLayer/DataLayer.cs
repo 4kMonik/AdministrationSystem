@@ -52,19 +52,17 @@ namespace DataLayerLogic
             Convert.ToBoolean(await cmd.ExecuteNonQueryAsync());
         }
 
-        public async Task<List<userObject>> GetPage(int page_size = 5, int page_number = 1, string orderBy = "userID", string order = "ASC")
+        public async Task<List<userObject>> GetPage(sortRule rule, int page_size = 5, int page_number = 1)
         {
             await using var cmd = new NpgsqlCommand("SELECT \"userID\" AS \"ID\", \"userName\" AS \"Name\", \"userDateOfBirth\" AS \"Birthday\", \"role\" AS \"Role\"\r\n" +
                                                     "FROM \"UserSchema\".\"Users\"\r\nINNER JOIN \"UserSchema\".\"Roles\"\r\nON \"UserSchema\".\"Users\".\"userRole\" = \"UserSchema\".\"Roles\".\"roleID\"\r\n" +
                                                     "ORDER BY \r\n\t" +
-                                                    "\"" + orderBy + "\" " +
-                                                    order + " " +
-                                                    "LIMIT $3 OFFSET $4")
+                                                    "\"" + rule.getSortByString() + "\" " +
+                                                    rule.getOrderString() + " " +
+                                                    "LIMIT $1 OFFSET $2")
             {
                 Parameters =
             {
-                new() { Value = orderBy },
-                new() { Value = order },
                 new() { Value = page_size},
                 new() { Value = (page_number - 1) * page_size}
 

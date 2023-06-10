@@ -49,4 +49,44 @@
             return new userLoginTime(loginTime);
         }
     }
+    public class sortRule
+    {
+        public enum COLUMNS
+        {
+            id = 1,
+            name = 2,
+            date,
+            role
+        }
+        public bool isDesc;
+        public COLUMNS sortBy;
+        public sortRule(bool isDesc = false, COLUMNS sortBy = COLUMNS.id) 
+        {
+            this.isDesc = isDesc;
+            this.sortBy = sortBy;
+        }
+        public string getSortByString()
+        {
+            switch (sortBy) 
+            {
+            case COLUMNS.id:
+                return "userID";
+            case COLUMNS.name:
+                return "userName";
+            case COLUMNS.date:
+                return "userDateOfBirth";
+            case COLUMNS.role:
+                return "userRole";
+            default:
+                throw new ArgumentException();
+            }
+        }
+        public string getOrderString()
+        {
+            if (isDesc)
+                return "DESC";
+            else
+                return "ASC";
+        }
+    }
 }

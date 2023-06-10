@@ -85,7 +85,7 @@ namespace BuisnessLayerLogic
             return true;
         }
 
-        public async Task<usersListPage> LoadPage(int pageSize = 5, int pageNum = 1, string orderBy = "userID", string order = "ASC")
+        public async Task<usersListPage> LoadPage(int pageSize = 5, int pageNum = 1, int orderBy = 1, bool isDesc = false)
         {
             if (pageSize < 1)
                 throw new ArgumentOutOfRangeException("Invalid page size");
@@ -95,7 +95,7 @@ namespace BuisnessLayerLogic
             if (pageNum < 1 || pageNum > userCount / pageSize + additionalPage)
                 throw new ArgumentOutOfRangeException("Invalid number of pages");
             usersListPage page = new usersListPage(pageNum);
-            var userList = await dataLayer.GetPage(pageSize, pageNum, orderBy, order);
+            var userList = await dataLayer.GetPage(new sortRule(isDesc, (sortRule.COLUMNS)orderBy), pageSize, pageNum);
             foreach (var user in userList)
             {
                 page.AddRow(user.userId, Tuple.Create(user.userName, user.userBirthDate.ToString(), user.userRole.ToString()));

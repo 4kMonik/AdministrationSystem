@@ -1,5 +1,7 @@
 ﻿using BuisnessLayerLogic;
 using PageObject;
+using System;
+using System.Net.Sockets;
 
 namespace UserInterfaceLogic
 {
@@ -87,6 +89,14 @@ namespace UserInterfaceLogic
             Console.WriteLine("Enter any key to repeat");
             Console.ReadKey(true);
         }
+        private static ConsoleKey SortByRequest()
+        {
+            Console.WriteLine("1 - sort by ID");
+            Console.WriteLine("2 - sort by name");
+            Console.WriteLine("3 - sort by date");
+            Console.WriteLine("4 - sort by role");
+            return Console.ReadKey(true).Key;
+        }
         public async Task MainScreen()
         {
         Start:
@@ -105,8 +115,8 @@ namespace UserInterfaceLogic
         public async Task PageScreen(int startPageNum = 1)
         {
             int pageNum = startPageNum;
-            string orderBy = "userID";
-            string order = "ASC";
+            var orderBy = 1;
+            var order= false;
             usersListPage page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
         Start:          
             DisplayPage(page);
@@ -195,17 +205,33 @@ namespace UserInterfaceLogic
                     }
                     goto Start;
                 case ConsoleKey.UpArrow:
-                    order = "ASC";
+                    order = false;
                     page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
                     goto Start;
                 case ConsoleKey.DownArrow:
-                    order = "DESC";
+                    order = true;
                     page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
                     goto Start;
-                case ConsoleKey.F:
-                    var filter = Console.ReadLine();
-                    if (filter == "userID" || filter == "userName" || filter == "userDateOfBirth" || filter == "userRole")
-                        orderBy = filter;
+                case ConsoleKey.O:
+                    var sortBy = SortByRequest();
+                    switch (sortBy)
+                    {
+                        case ConsoleKey.D1:
+                            orderBy = 1;
+                            break;
+                        case ConsoleKey.D2:
+                            orderBy = 2;
+                            break;
+                        case ConsoleKey.D3:
+                            orderBy = 3;
+                            break;
+                        case ConsoleKey.D4:
+                            orderBy = 4;
+                            break;
+                        default:
+                            break;
+                    }
+
                     page = await buisnessLayer.LoadPage(pageSize, pageNum, orderBy, order);
                     goto Start;
                 default:
@@ -268,12 +294,16 @@ namespace UserInterfaceLogic
         protected void DisplayPage(usersListPage page)
         {
             Console.Clear();
+            Console.WriteLine("===========================");
+            Console.WriteLine("ID | Name | BirthDate | Role");
+            Console.WriteLine("===========================");
             foreach (var id in page.GetIdList()) 
             {
                 Console.WriteLine(id + " " + page.GetNameById(id) + " " + page.GetBirthDateById(id) + " " + page.GetRoleById(id));
             }
             Console.WriteLine("===========================");
-            Console.WriteLine("Page:" + page.pageNum);
+            Console.WriteLine("Page:" + page.pageNum + "\n");
+            Console.WriteLine("<--> - change page\n↑↓ - change sort order\nS - change page size\nP - go to page\nA - add user\nO - change order by\nEsc - exit");
         }
 
         protected void DisplayUser(userPage user)
@@ -286,6 +316,7 @@ namespace UserInterfaceLogic
                 Console.WriteLine(login);
                 Console.WriteLine("---------------------------");
             }
+
 
         }
 
